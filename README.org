@@ -1,0 +1,5 @@
+* what's this repo for?
+
+collect/store a set of action scripts for [[http://qsapp.com/wiki/Main_Page][QuickSilver]].
+
+QS FTW!!!

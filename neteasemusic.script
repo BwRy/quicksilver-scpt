@@ -1,0 +1,30 @@
+using terms from application "Quicksilver"
+	on process text _text
+
+		set _textSubstitutionList to {{"a", "Pause"}, {"n", "Next"}, {"p", "Previous"}, {"l", "Like"}, {">", "Play"}}
+		repeat with _textSubstitution in _textSubstitutionList
+			if _text = item 1 of _textSubstitution then
+				set _text to item 2 of _textSubstitution
+				exit repeat
+			end if
+		end repeat
+
+		if _text is not in {"Pause", "Next", "Previous", "Like", "Play"} then set _text to "Play"
+		try
+
+			tell application "System Events"
+
+				tell process "NeteaseMusic" to click menu item _text of menu 1 of menu bar item "Controls" of menu bar 1
+
+			end tell
+
+			--tell application "Quicksilver" to set selection to ("iTunes Shuffle: " & _text)
+
+			display notification _text with title "NeteaseMusic"
+
+		on error a number b
+			display notification a with title "NeteaseMusic"
+			--tell application "Quicksilver" to set selection to a
+		end try
+	end process text
+end using terms from
