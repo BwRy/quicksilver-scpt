@@ -1,0 +1,40 @@
+property emacsclientBinary : "/usr/local/bin/emacsclient"
+
+on urlencode(plaintext)
+  set enctext to do shell script "python -c 'import sys, urllib; print urllib.quote(sys.argv[1])' " & quoted form of plaintext
+  return enctext
+end urlencode
+
+tell application "Microsoft Outlook"
+  -- set msgCount to count current messages
+  set msgCount to 2
+  if (msgCount < 1) then
+    return
+  end if
+
+  set myMessage to (the first item of (get current messages))
+  set myID to id of myMessage as string
+  set mySubject to subject of myMessage
+  set mySender to sender of myMessage
+  set mySenderName to name of mySender
+  set myCtn to selection
+
+  set myTitle to "[mail] " & mySubject
+
+  set myCmd to emacsclientBinary & " -n -c -F \"((name . \\\"emacs-capture\\\") (height . 10) (width . 80))\" "
+  set myCmd to myCmd & " \"org-protocol:/capture:/o"
+  set myCmd to myCmd & "/" & mySenderName
+  set myCmd to myCmd & "/" & myTitle -- FIMXE, /
+  -- set myCmd to myCmd & "/" & (my urlencode(myCtn))
+
+  set myCmd to myCmd & "\""
+
+  do shell script myCmd
+  -- http://stackoverflow.com/questions/13173514/applescript-bring-window-to-foreground
+  tell application "System Events"
+    tell process "Emacs"
+      set frontmost to true
+      -- perform action "AXRaise" of (windows whose title is "emacs-capture")
+    end tell
+  end tell
+end tell
