@@ -1,0 +1,12 @@
+property emacsclientBinary : "/usr/local/bin/emacsclient"
+
+set param to "org-protocol://capture:/t"
+set mycmd to emacsclientBinary & " -n -c -F \"((name . \\\"emacs-capture\\\") (height . 10) (width . 80))\" " & param
+do shell script mycmd
+-- http://stackoverflow.com/questions/13173514/applescript-bring-window-to-foreground
+tell application "System Events"
+  tell process "Emacs"
+    set frontmost to true
+    perform action "AXRaise" of (windows whose title is "emacs-capture")
+  end tell
+end tell
